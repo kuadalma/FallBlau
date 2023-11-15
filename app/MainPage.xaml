@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="MauiApp1.MainPage">
+
+    <StackLayout>
+        <Label Text="Task Management" HorizontalOptions="CenterAndExpand" FontSize="Large" Margin="10"/>
+
+        <!-- Task Entry Section -->
+        <StackLayout Margin="10">
+            <Label Text="New Task" FontSize="Medium"/>
+            <Entry x:Name="taskEntry" Placeholder="Enter task description"/>
+            <DatePicker x:Name="dueDatePicker" Date="{Binding DueDate}" Format="D" />
+            <Button Text="Add Task" Clicked="OnAddTaskClicked" HorizontalOptions="FillAndExpand"/>
+        </StackLayout>
+
+        <!-- Task List Section -->
+        <ListView x:Name="taskListView" ItemsSource="{Binding Tasks}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout>
+                            <Label Text="{Binding Description}" FontSize="Medium"/>
+                            <Label Text="{Binding DueDate, StringFormat='Due: {0:MM/dd/yyyy}'}" FontSize="Small"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Label x:Name="pathLabel" FontSize="Small" Text="File Path: " Margin="10"/>
+    </StackLayout>
+
+</ContentPage>
