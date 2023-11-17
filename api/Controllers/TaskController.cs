@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,35 +19,37 @@ namespace api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
         {
-            return await _context.task.ToListAsync();
+            return await _context.Task.ToListAsync();
         }
         [HttpGet("{Id}")]
         public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasksByUser(int Id)
         {
+            //IEnumerable<Models.Task
             if (Id == null)
             {
                 return BadRequest(string.Empty);
             }
             else
             {
-                var user = await _context.user.FindAsync(Id);
+                var user = await _context.User.Include(t => t.Task).FirstOrDefaultAsync(x=>x.Id==Id);
                 if (user == null)
                 {
                     return NotFound();
                 }
-                return user.Tasks;
+                var e = user.Task.ToList();
+                return Ok(e);
             }
         }
         [HttpPost("{name},{desc},{createDate},{setDate},{userID}")]
         public async Task<ActionResult> CreateQuest(string name, string desc,string createDate, string setDate ,int userID)
         {
-            var user = await _context.user.FindAsync(userID);
+            var user = await _context.User.FirstOrDefaultAsync(x=>x.Id==userID);
             if (user == null || name == null || desc == null || createDate == null|| setDate==null)
             {
                 return BadRequest(string.Empty); ;
             }
             var task = new Models.Task { Name = name, Description = desc, User = user, CreateDate = createDate, SetDate = setDate, IsCompleted = false };
-            _context.task.Add(task);
+            _context.Task.Add(task);
             await _context.SaveChangesAsync();
             return Ok();
         }
@@ -59,7 +62,7 @@ namespace api.Controllers
             }
             else
             { 
-                var task = _context.task.Find(id);
+                var task = _context.Task.Find(id);
                 if (task == null)
                 {
                     return NotFound();
@@ -78,12 +81,12 @@ namespace api.Controllers
             }
             else
             {
-                var task = await _context.task.FindAsync(id);
+                var task = await _context.Task.FindAsync(id);
                 if (task == null)
                 {
                     return NotFound();
                 }
-                _context.task.Remove(task);
+                _context.Task.Remove(task);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

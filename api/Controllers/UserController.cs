@@ -25,7 +25,7 @@ namespace api.Controllers
             }
             else
             {
-                var user = await _context.user.FindAsync(id);
+                var user = await _context.User.FindAsync(id);
                 if (user == null)
                 {
                     return NotFound();
@@ -43,10 +43,10 @@ namespace api.Controllers
             }
             else
             {
-                var user = await _context.user.FirstOrDefaultAsync(x => x.Email == email);
+                var user = await _context.User.FirstOrDefaultAsync(x => x.Email == email);
                 if (user == null)
                 {
-                    _context.user.Add(new User { Name = nazwa, Email = email, Password = pass });
+                    _context.User.Add(new User { Name = nazwa, Email = email, Password = pass });
                     _context.SaveChanges();
                     return Ok();
                 }
@@ -59,12 +59,12 @@ namespace api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            var user = await _context.user.FindAsync(id);
+            var user = await _context.User.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            _context.user.Remove(user);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
             return Ok();
         }
