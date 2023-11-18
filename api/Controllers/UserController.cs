@@ -16,19 +16,23 @@ namespace api.Controllers
             _context = context;
             _configuration = configuration;
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        [HttpGet("{email},{pass}")]
+        public async Task<ActionResult<User>> LoginUser(string email, string pass)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(pass))
             {
                 return BadRequest(string.Empty);
             }
             else
             {
-                var user = await _context.User.FindAsync(id);
+                var user = await _context.User.FirstOrDefaultAsync(x => x.Email == email);
                 if (user == null)
                 {
-                    return NotFound();
+                    return BadRequest("hasło lub email nie poprawne");
+                }
+                if (user.Password != pass)
+                {
+                    return BadRequest("hasło lub email nie poprawne");
                 }
                 return user;
             }
