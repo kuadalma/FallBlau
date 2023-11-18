@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\student\\source\\repos\\FallBlau-main\\FallBlau-main\\api\\api.csproj": {}
+    "C:\\Users\\barte\\source\\repos\\kuadalma\\DesignBlau\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\student\\source\\repos\\FallBlau-main\\FallBlau-main\\api\\api.csproj": {
+    "C:\\Users\\barte\\source\\repos\\kuadalma\\DesignBlau\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\student\\source\\repos\\FallBlau-main\\FallBlau-main\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\barte\\source\\repos\\kuadalma\\DesignBlau\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Users\\student\\source\\repos\\FallBlau-main\\FallBlau-main\\api\\api.csproj",
-        "packagesPath": "C:\\Users\\student\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\student\\source\\repos\\FallBlau-main\\FallBlau-main\\api\\obj\\",
+        "projectPath": "C:\\Users\\barte\\source\\repos\\kuadalma\\DesignBlau\\api\\api.csproj",
+        "packagesPath": "C:\\Users\\barte\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\barte\\source\\repos\\kuadalma\\DesignBlau\\api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\student\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\barte\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

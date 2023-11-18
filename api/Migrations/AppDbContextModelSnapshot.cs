@@ -51,7 +51,7 @@ namespace api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("task");
+                    b.ToTable("Task");
                 });
 
             modelBuilder.Entity("api.Models.User", b =>
@@ -74,7 +74,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("user");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("api.Models.Task", b =>

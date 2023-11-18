@@ -21,23 +21,26 @@ namespace api.Controllers
         {
             return await _context.Task.ToListAsync();
         }
-        [HttpGet("{Id}")]
-        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasksByUser(int Id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasksByUser(int id)
         {
-            //IEnumerable<Models.Task
-            if (Id == null)
+            if (id == null)
             {
                 return BadRequest(string.Empty);
             }
             else
             {
-                var user = await _context.User.Include(t => t.Task).FirstOrDefaultAsync(x=>x.Id==Id);
+                var user = await _context.User.Include(t => t.Task).FirstOrDefaultAsync(x=>x.Id== id);
                 if (user == null)
                 {
                     return NotFound();
                 }
-                var e = user.Task.ToList();
-                return Ok(e);
+                List<Models.Task> e = new();
+                foreach (Models.Task t in user.Task)
+                {
+                    e.Add(new Models.Task { Id = t.Id, Name = t.Name, Description = t.Description, CreateDate = t.CreateDate, SetDate = t.SetDate, IsCompleted = t.IsCompleted });
+                }
+                return e;
             }
         }
         [HttpPost("{name},{desc},{createDate},{setDate},{userID}")]
