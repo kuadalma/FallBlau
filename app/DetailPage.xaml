@@ -1,32 +1,26 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="app.DetailPage"
-             Title="DetailPage"
              xmlns:viewmodel="clr-namespace:app.ViewModel"
              x:DataType="viewmodel:DetailViewModel">
 
-    <Grid RowDefinitions="1*, 1*, 0.25*"
-          ColumnDefinitions="50*, 50*"
-          Padding="20"
-          RowSpacing="20"
-          ColumnSpacing="20">
-        <Label Text="{Binding Text}"
-               FontSize="30"
-               Grid.Row="0"
-               Grid.ColumnSpan="2"
-               VerticalOptions="Start" 
-               HorizontalOptions="Center" />
-
-        <Button Text="Go Back"
-                Grid.Row="2"
-                Grid.Column="0"
-                Command="{Binding GoBackCommand}"/>
-
-        <Button Text="Edit"
-                Grid.Row="2"
-                Grid.Column="1"
-                Command="{Binding GoBackCommand}"/>
-
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Name}" FontSize="75" HorizontalOptions="Center" VerticalOptions="Center"/>
+        <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Desc}" FontSize="25" HorizontalOptions="Center" Margin="50"/>
+        <Label Grid.Row="2" Grid.Column="0" Text="{Binding SetDate}" FontSize="30" HorizontalOptions="Center"/>
+        <Label Grid.Row="2" Grid.Column="1" Text="{Binding CreateDate}" FontSize="30" HorizontalOptions="Center"/>
+        <Button Grid.Row="3" Grid.ColumnSpan="2" Command="{Binding GoBackCommand}" Text="Back" FontSize="25"/>
     </Grid>
+
 </ContentPage>

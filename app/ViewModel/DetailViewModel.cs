@@ -3,14 +3,26 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace app.ViewModel
 {
-    [QueryProperty("Text", "Text")]
+    [QueryProperty("Name", "Name")]
+    [QueryProperty("Desc", "Desc")]
+    [QueryProperty("CreateDate", "CreateDate")]
+    [QueryProperty("SetDate", "SetDate")]
     public partial class DetailViewModel : ObservableObject
     {
         [ObservableProperty]
-        string text;
+        string name;
+
+        [ObservableProperty]
+        string desc;
+
+        [ObservableProperty]
+        string createDate;
+
+        [ObservableProperty]
+        string setDate;
 
         [RelayCommand]
-        async Task GoBack()
+        static async Task GoBack()
         {
             await Shell.Current.GoToAsync("..");
         }
