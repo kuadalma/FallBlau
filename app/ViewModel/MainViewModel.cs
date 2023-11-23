@@ -1,52 +1,60 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using app.models;
 
 namespace app.ViewModel
 {
     public partial class MainViewModel : ObservableObject
     {
-        IConnectivity connectivity;
-        public MainViewModel(IConnectivity connectivity)
+        public MainViewModel()
         {
-            Items = new ObservableCollection<string>();
-            this.connectivity = connectivity;
+            Items = new ObservableCollection<TaskModel>();
         }
 
         [ObservableProperty]
-        ObservableCollection<string> items;
+        ObservableCollection<TaskModel> items;
 
         [ObservableProperty]
-        private string text;
+        private string name;
+
+        [ObservableProperty]
+        private string desc;
+
+        [ObservableProperty]
+        private DateTime setDate;
 
         [RelayCommand]
         async Task Add()
         {
-            if(string.IsNullOrEmpty(Text))
+            if (string.IsNullOrEmpty(Name))
                 return;
 
-            if (connectivity.NetworkAccess != NetworkAccess.Internet) 
-            {
-                await Shell.Current.DisplayAlert("No Internet", "You need to be connected to the internet to add items", "OK");
-                return;
-            }
-            Items.Add(Text);
-            Text = string.Empty;
+            TaskModel task = new TaskModel(Name, SetDate.ToString("d"), Desc);
+            Items.Add(task);
+            Name = string.Empty;
+            Desc = string.Empty;
+            SetDate = DateTime.Today;
         }
 
         [RelayCommand]
-        void Remove(string s)
+        void Remove(TaskModel task)
         {
-            if (Items.Contains(s))
-                Items.Remove(s);
+            if (Items.Contains(task))
+                Items.Remove(task);
         }
 
         [RelayCommand]
-        async Task Tap(string s)
+        void Complete(TaskModel task)
         {
-            await Shell.Current.GoToAsync($"{nameof(DetailPage)}?Text={s}");
+            if (Items.Contains(task))
+                Items.Remove(task);
         }
 
+        [RelayCommand]
+        async Task Tap(TaskModel task)
+        {
+            await Shell.Current.GoToAsync($"{nameof(DetailPage)}?Name={task.Name}&Desc={task.Desc}&CreateDate={task.CreateDate}&SetDate={task.SetDate}");
+        }
     }
 }

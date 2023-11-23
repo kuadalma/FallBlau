@@ -2,37 +2,49 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="app.MainPage"
+             xmlns:models="clr-namespace:app.models"
              xmlns:viewmodel="clr-namespace:app.ViewModel"
              x:DataType="viewmodel:MainViewModel">
 
 
-    <Grid RowDefinitions="100, auto, *"
-          ColumnDefinitions=".75*, .25*"
-          Padding="10"
-          RowSpacing="10"
-          ColumnSpacing="10">
+    <StackLayout 
+                Padding="20"
+                Spacing="10">
         
-        <Image Grid.ColumnSpan="2"
-               Source="dotnet_bot.png"
-               BackgroundColor="Transparent"/>
+        <Image Source="dotnet_bot.png"
+               BackgroundColor="Transparent"
+               HeightRequest="100"/>
+
+        <Entry Placeholder="Enter task name"
+               HorizontalOptions="StartAndExpand"
+               Text="{Binding Name}"
+               FontSize="25"/>
+
+        <Entry Placeholder="Enter task description"
+               HorizontalOptions="StartAndExpand"
+               Text="{Binding Desc}"
+               FontSize="25"/>
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="CenterAndExpand">
+            <DatePicker
+                        Date="{Binding SetDate}"
+                        HorizontalOptions="FillAndExpand"
+                        FontSize="25"/>
+
+            <Button Text="Add Task"
+                    Command="{Binding AddCommand}"
+                    HorizontalOptions="FillAndExpand"
+                    FontSize="25"/>     
+        </StackLayout>
         
-        <Entry Placeholder="Enter task"
-               Text="{Binding Text}"
-               Grid.Row="1"/>
-        
-        <Button Text="Add"
-                Command="{Binding AddCommand}"
-                Grid.Row="1"
-                Grid.Column="1"/>
 
         <CollectionView 
-            Grid.Row="2" Grid.ColumnSpan="2"
             ItemsSource="{Binding Items}"
             SelectionMode="None">
             
             <CollectionView.ItemTemplate>
                 <DataTemplate 
-                    x:DataType="{x:Type x:String}">
+                    x:DataType="models:TaskModel">
                     <SwipeView>
                         <SwipeView.RightItems>
                             <SwipeItems>
@@ -43,23 +55,33 @@
                                     CommandParameter="{Binding .}"/>
                             </SwipeItems>
                         </SwipeView.RightItems>
-                        <Grid 
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem 
+                                    Text="complete"
+                                    BackgroundColor="Green"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=completeCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <StackLayout 
                             Padding="0,5">
-                            <Frame>
+                            <Frame 
+                                Padding="10" 
+                                CornerRadius="5"
+                                HasShadow="True">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer 
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TapCommand}"
                                         CommandParameter="{Binding .}"/>
                                 </Frame.GestureRecognizers>
-                                <Label 
-                                    Text="{Binding .}"
-                                    FontSize="24"/>
+                                <Label Text="{Binding Name}" FontSize="30"/>
                             </Frame>
-                        </Grid>
+                        </StackLayout>
                     </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-    </Grid>
+    </StackLayout>
 
 </ContentPage>
