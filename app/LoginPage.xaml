@@ -49,5 +49,7 @@
                     BackgroundColor="Transparent"
                     TextColor="Purple"
                     HorizontalOptions="Center" />
+
+        <Label Text="{Binding Error}"  TextColor="Red"/>
     </StackLayout>
 </ContentPage>

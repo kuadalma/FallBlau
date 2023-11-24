@@ -42,9 +42,10 @@
             <Button Text="Add Task"
                     Command="{Binding AddCommand}"
                     HorizontalOptions="FillAndExpand"
-                    FontSize="25"/>     
+                    FontSize="25"/>
         </StackLayout>
-        
+        <Label Text="{Binding Error}" TextColor="Red"/>
+
 
         <CollectionView 
             ItemsSource="{Binding Items}"

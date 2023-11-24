@@ -1,6 +1,8 @@
-﻿using app.services;
+﻿using app.models;
+using app.services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 
 namespace app.ViewModel
 {
@@ -14,7 +16,7 @@ namespace app.ViewModel
         }
 
         [ObservableProperty]
-        private string id = "test";
+        private string id;
 
         [ObservableProperty]
         private string userLogin;
@@ -22,12 +24,57 @@ namespace app.ViewModel
         [ObservableProperty]
         private string userPassword;
 
+        [ObservableProperty]
+        private string error;
+
         [RelayCommand]
         private async void Login()
         {
             authService.Login();
             await Shell.Current.GoToAsync($"//{nameof(MainPage)}?User={Id}");
+            //if (!string.IsNullOrWhiteSpace(UserLogin) && !string.IsNullOrWhiteSpace(UserPassword))
+            //{
+            //    string loginUrl = $"https://localhost:5001/api/User/{UserLogin},{UserPassword}";
+
+            //    try
+            //    {
+            //        using HttpClient client = new();
+            //        HttpResponseMessage response = await client.GetAsync(loginUrl);
+
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            string responseBody = await response.Content.ReadAsStringAsync();
+            //            var user = JsonConvert.DeserializeObject<User>(responseBody);
+
+            //            if (user != null)
+            //            {
+            //                authService.Login();
+            //                await Shell.Current.GoToAsync($"//{nameof(MainPage)}?User={Id}");
+            //            }
+            //            else
+            //            {
+            //                Error = "user == null";
+            //            }
+            //        }
+            //        else
+            //        {
+            //            Error = $"HTTP error: {response.StatusCode}";
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Error = ex.Message;
+            //        await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            //    }
+            //}
+            //else
+            //{
+            //    Error = "Puste pole";
+            //    await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            //}
+
         }
+
 
         [RelayCommand]
         private async void Register()
