@@ -1,36 +1,97 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             x:Class="MauiApp1.MainPage">
+             x:Class="app.MainPage"
+             xmlns:models="clr-namespace:app.models"
+             xmlns:viewmodel="clr-namespace:app.ViewModel"
+             x:DataType="viewmodel:MainViewModel">
 
-    <StackLayout>
-        <Label Text="Task Management" HorizontalOptions="CenterAndExpand" FontSize="Large" Margin="10"/>
 
-        <!-- Task Entry Section -->
-        <StackLayout Margin="10">
-            <Label Text="New Task" FontSize="Medium"/>
-            <Entry x:Name="taskEntry" Placeholder="Enter task description"/>
-            <DatePicker x:Name="dueDatePicker" Date="{Binding DueDate}" Format="D" />
-            <Button Text="Add Task" Clicked="OnAddTaskClicked" HorizontalOptions="FillAndExpand"/>
+    <StackLayout 
+                Padding="20"
+                Spacing="10">
+
+        <Grid ColumnDefinitions="1*, 1*, 0.5*">
+            <Image Source="dotnet_bot.png"
+                   BackgroundColor="Transparent"
+                   HeightRequest="100"
+                   Grid.Column="0"/>
+
+            <Button Text="LogOut"
+                   Command="{Binding LogOutCommand}"
+                    FontSize="14"
+                    Grid.Column="2"/>
+        </Grid>
+
+        <Entry Placeholder="Enter task name"
+               HorizontalOptions="StartAndExpand"
+               Text="{Binding Name}"
+               FontSize="25"/>
+
+        <Entry Placeholder="Enter task description"
+               HorizontalOptions="StartAndExpand"
+               Text="{Binding Desc}"
+               FontSize="25"/>
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="CenterAndExpand">
+            <DatePicker
+                        Date="{Binding SetDate}"
+                        HorizontalOptions="FillAndExpand"
+                        FontSize="25"/>
+
+            <Button Text="Add Task"
+                    Command="{Binding AddCommand}"
+                    HorizontalOptions="FillAndExpand"
+                    FontSize="25"/>
         </StackLayout>
+        <Label Text="{Binding Error}" TextColor="Red"/>
+        <Label Text="{Binding User}" TextColor="Red"/>
 
-        <!-- Task List Section -->
-        <ListView x:Name="taskListView" ItemsSource="{Binding Tasks}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout>
-                            <Label Text="{Binding Description}" FontSize="Medium"/>
-                            <Label Text="{Binding DueDate, StringFormat='Due: {0:MM/dd/yyyy}'}" FontSize="Small"/>
+
+        <CollectionView 
+            ItemsSource="{Binding Items}"
+            SelectionMode="None">
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate 
+                    x:DataType="models:TaskModel">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem 
+                                    Text="Delete"
+                                    BackgroundColor="Red"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem 
+                                    Text="complete"
+                                    BackgroundColor="Green"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CompleteCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <StackLayout 
+                            Padding="0,5">
+                            <Frame 
+                                Padding="10" 
+                                CornerRadius="5"
+                                HasShadow="True">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TapCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                <Label Text="{Binding Name}" FontSize="30"/>
+                            </Frame>
                         </StackLayout>
-                    </ViewCell>
+                    </SwipeView>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <Label x:Name="pathLabel" FontSize="Small" Text="File Path: " Margin="10"/>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </StackLayout>
 
 </ContentPage>
