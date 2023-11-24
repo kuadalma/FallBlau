@@ -1,4 +1,5 @@
-﻿using app.ViewModel;
+﻿using app.services;
+using app.ViewModel;
 
 namespace app;
 
@@ -14,6 +15,13 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
+
+		builder.Services.AddTransient<AuthService>();
+		builder.Services.AddTransient<LoadingPage>();
+
+        builder.Services.AddTransient<LoginPage>();
+        builder.Services.AddTransient<LoginViewModel>();
+
 
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<MainViewModel>();

@@ -10,10 +10,18 @@
     <StackLayout 
                 Padding="20"
                 Spacing="10">
-        
-        <Image Source="dotnet_bot.png"
-               BackgroundColor="Transparent"
-               HeightRequest="100"/>
+
+        <Grid ColumnDefinitions="1*, 1*, 0.5*">
+            <Image Source="dotnet_bot.png"
+                   BackgroundColor="Transparent"
+                   HeightRequest="100"
+                   Grid.Column="0"/>
+
+            <Button Text="LogOut"
+                   Command="{Binding LogOutCommand}"
+                    FontSize="14"
+                    Grid.Column="2"/>
+        </Grid>
 
         <Entry Placeholder="Enter task name"
                HorizontalOptions="StartAndExpand"
@@ -31,7 +39,7 @@
                         HorizontalOptions="FillAndExpand"
                         FontSize="25"/>
 
-            <Button Text="Add Task"
+            <Button Text="{Binding User}"
                     Command="{Binding AddCommand}"
                     HorizontalOptions="FillAndExpand"
                     FontSize="25"/>     
@@ -60,7 +68,7 @@
                                 <SwipeItem 
                                     Text="complete"
                                     BackgroundColor="Green"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=completeCommand}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=CompleteCommand}"
                                     CommandParameter="{Binding .}"/>
                             </SwipeItems>
                         </SwipeView.LeftItems>

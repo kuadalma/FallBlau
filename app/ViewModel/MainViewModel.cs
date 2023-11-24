@@ -2,15 +2,23 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using app.models;
+using app.services;
 
 namespace app.ViewModel
 {
+    [QueryProperty("User", "User")]
     public partial class MainViewModel : ObservableObject
     {
-        public MainViewModel()
+        private readonly AuthService authService;
+        public MainViewModel(AuthService authService)
         {
             Items = new ObservableCollection<TaskModel>();
+            this.authService = authService;
         }
+
+        
+        [ObservableProperty]
+        string user;
 
         [ObservableProperty]
         ObservableCollection<TaskModel> items;
@@ -38,14 +46,14 @@ namespace app.ViewModel
         }
 
         [RelayCommand]
-        void Remove(TaskModel task)
+        private void Remove(TaskModel task)
         {
             if (Items.Contains(task))
                 Items.Remove(task);
         }
 
         [RelayCommand]
-        void Complete(TaskModel task)
+        private void Complete(TaskModel task)
         {
             if (Items.Contains(task))
                 Items.Remove(task);
@@ -55,6 +63,13 @@ namespace app.ViewModel
         async Task Tap(TaskModel task)
         {
             await Shell.Current.GoToAsync($"{nameof(DetailPage)}?Name={task.Name}&Desc={task.Desc}&CreateDate={task.CreateDate}&SetDate={task.SetDate}");
+        }
+
+        [RelayCommand]
+        async Task LogOut()
+        {
+            authService.Logout();
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
     }
 }
