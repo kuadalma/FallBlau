@@ -39,7 +39,7 @@
                         HorizontalOptions="FillAndExpand"
                         FontSize="25"/>
 
-            <Button Text="{Binding User}"
+            <Button Text="Add Task"
                     Command="{Binding AddCommand}"
                     HorizontalOptions="FillAndExpand"
                     FontSize="25"/>     

@@ -10,12 +10,17 @@
         Title="Loading"
         ContentTemplate="{DataTemplate local:LoadingPage}"
         Route="LoadingPage" />
-    
+
     <ShellContent 
         Title="Login"
         ContentTemplate="{DataTemplate local:LoginPage}"
         Route="LoginPage" />
-    
+
+    <ShellContent 
+        Title="Register"
+        ContentTemplate="{DataTemplate local:RegisterPage}"
+        Route="RegisterPage" />
+
     <ShellContent 
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"

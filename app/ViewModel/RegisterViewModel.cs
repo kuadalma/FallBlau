@@ -4,11 +4,11 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace app.ViewModel
 {
-    public partial class LoginViewModel : ObservableObject
+    public partial class RegisterViewModel : ObservableObject
     {
         private readonly AuthService authService;
-        
-        public LoginViewModel(AuthService authService)
+
+        public RegisterViewModel(AuthService authService)
         {
             this.authService = authService;
         }
@@ -17,22 +17,25 @@ namespace app.ViewModel
         private string id = "test";
 
         [ObservableProperty]
+        private string userName;
+
+        [ObservableProperty]
         private string userLogin;
 
         [ObservableProperty]
         private string userPassword;
 
         [RelayCommand]
-        private async void Login()
+        private async void Register()
         {
             authService.Login();
-            await Shell.Current.GoToAsync($"//{nameof(MainPage)}?User={Id}");
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}?User={Id}");
         }
 
         [RelayCommand]
-        private async void Register()
+        private async void Login()
         {
-            await Shell.Current.GoToAsync($"//{nameof(RegisterPage)}");
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}?User={Id}");
         }
     }
 }
