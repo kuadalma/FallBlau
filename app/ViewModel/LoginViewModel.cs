@@ -30,48 +30,54 @@ namespace app.ViewModel
         [RelayCommand]
         private async void Login()
         {
-            authService.Login();
-            await Shell.Current.GoToAsync($"//{nameof(MainPage)}?User={Id}");
-            //if (!string.IsNullOrWhiteSpace(UserLogin) && !string.IsNullOrWhiteSpace(UserPassword))
-            //{
-            //    string loginUrl = $"https://localhost:5001/api/User/{UserLogin},{UserPassword}";
+            //authService.Login();
+            //await Shell.Current.GoToAsync($"//{nameof(MainPage)}?User={Id}");
+            if (!string.IsNullOrWhiteSpace(UserLogin) && !string.IsNullOrWhiteSpace(UserPassword))
+            {
+                string loginUrl = $"https://localhost:5001/api/User/{UserLogin},{UserPassword}";
 
-            //    try
-            //    {
-            //        using HttpClient client = new();
-            //        HttpResponseMessage response = await client.GetAsync(loginUrl);
+                try
+                {
+                    HttpClientHandler clientHandler = new HttpClientHandler();
+                    clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
-            //        if (response.IsSuccessStatusCode)
-            //        {
-            //            string responseBody = await response.Content.ReadAsStringAsync();
-            //            var user = JsonConvert.DeserializeObject<User>(responseBody);
+                    // Pass the handler to httpclient(from you are calling api)
+                    HttpClient client = new HttpClient(clientHandler);
+                    HttpResponseMessage response = await client.GetAsync(loginUrl);
 
-            //            if (user != null)
-            //            {
-            //                authService.Login();
-            //                await Shell.Current.GoToAsync($"//{nameof(MainPage)}?User={Id}");
-            //            }
-            //            else
-            //            {
-            //                Error = "user == null";
-            //            }
-            //        }
-            //        else
-            //        {
-            //            Error = $"HTTP error: {response.StatusCode}";
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Error = ex.Message;
-            //        await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
-            //    }
-            //}
-            //else
-            //{
-            //    Error = "Puste pole";
-            //    await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
-            //}
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+
+                        var user = JsonConvert.DeserializeObject<User>(responseBody);
+
+                        if (user != null)
+                        {
+                            Id = user.id;
+                            authService.Login();
+                            await Shell.Current.GoToAsync($"//{nameof(MainPage)}?User={Id}");
+                        }
+                        else
+                        {
+                            Error = "user == null";
+                        }
+                    }
+                    else
+                    {
+                        Error = $"HTTP error: {response.StatusCode}";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Error = ex.Message;
+                    await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+                }
+            }
+            else
+            {
+                Error = "Puste pole";
+                await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            }
 
         }
 

@@ -45,6 +45,7 @@
                     FontSize="25"/>
         </StackLayout>
         <Label Text="{Binding Error}" TextColor="Red"/>
+        <Label Text="{Binding User}" TextColor="Red"/>
 
 
         <CollectionView 

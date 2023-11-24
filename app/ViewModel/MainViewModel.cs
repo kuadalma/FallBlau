@@ -44,7 +44,7 @@ namespace app.ViewModel
 
             TaskModel task = new TaskModel(Name, SetDate.ToString("d"), Desc);
             Items.Add(task);
-            //AddToBaseAsync(Name, Desc, DateTime.Today.ToString("d"), SetDate.ToString("d"), User);
+            AddToBaseAsync(Name, Desc, DateTime.Today.ToString("d"), SetDate.ToString("d"), User);
             Name = string.Empty;
             Desc = string.Empty;
             SetDate = DateTime.Today;
@@ -85,7 +85,11 @@ namespace app.ViewModel
 
                 try
                 {
-                    using HttpClient client = new();
+                    HttpClientHandler clientHandler = new HttpClientHandler();
+                    clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+                    // Pass the handler to httpclient(from you are calling api)
+                    HttpClient client = new HttpClient(clientHandler);
                     HttpResponseMessage response = await client.PostAsync(loginUrl, null);
 
                     if (response.IsSuccessStatusCode)

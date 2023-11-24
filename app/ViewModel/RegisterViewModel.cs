@@ -41,22 +41,16 @@ namespace app.ViewModel
 
                 try
                 {
-                    using HttpClient client = new();
+                    HttpClientHandler clientHandler = new HttpClientHandler();
+                    clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+                    // Pass the handler to httpclient(from you are calling api)
+                    HttpClient client = new HttpClient(clientHandler);
                     HttpResponseMessage response = await client.PostAsync(loginUrl,null);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        var user = JsonConvert.DeserializeObject<User>(responseBody);
-
-                        if (user != null)
-                        {
-                            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
-                        }
-                        else
-                        {
-                            Error = "user == null";
-                        }
+                         await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
                     }
                 }
                 catch (Exception ex)

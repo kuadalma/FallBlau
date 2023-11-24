@@ -35,7 +35,7 @@ namespace LocalhostMAUI
         {
             public bool Verify(string hostname, ISSLSession session)
             {
-                if (HttpsURLConnection.DefaultHostnameVerifier.Verify(hostname, session) || hostname == "127.0.0.1")
+                if (HttpsURLConnection.DefaultHostnameVerifier.Verify(hostname, session) || hostname == "localhost")
                 {
                     return true;
                 }
