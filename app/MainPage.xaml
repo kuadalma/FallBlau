@@ -6,7 +6,7 @@
              xmlns:viewmodel="clr-namespace:app.ViewModel"
              x:DataType="viewmodel:MainViewModel">
 
-
+    
     <StackLayout 
                 Padding="20"
                 Spacing="10">

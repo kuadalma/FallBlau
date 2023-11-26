@@ -54,7 +54,10 @@ namespace app.ViewModel
         private void Remove(TaskModel task)
         {
             if (Items.Contains(task))
+            {
                 Items.Remove(task);
+                RemoveFromBaseAsync(1);
+            }
         }
 
         [RelayCommand]
@@ -76,36 +79,48 @@ namespace app.ViewModel
             authService.Logout();
             await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
+        //notwork HELP!!!
+        public async void LoadItemsAsync()
+        {
+            try
+            {
+                Items.Clear();
 
+                string apiUrl = $"https://localhost:5001/api/Task/{User}";
+                HttpClientHandler clientHandler = new() { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } };
+                HttpClient client = new(clientHandler);
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var fetchedItems = JsonConvert.DeserializeObject<List<TaskModel>>(responseBody);
+
+                    foreach (var item in fetchedItems)
+                    {
+                        Items.Add(item);
+                    }
+                }
+                else
+                {
+                    Error = $"Failed to fetch items. Status code: {response.StatusCode}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Error = $"Error loading items: {ex.Message}";
+            }
+        }
         private async void AddToBaseAsync(string name, string desc, string createDate, string setDate, string userID)
         {
             if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(desc) && !string.IsNullOrWhiteSpace(createDate) && !string.IsNullOrWhiteSpace(setDate) && !string.IsNullOrWhiteSpace(userID))
             {
-                string loginUrl = $"https://localhost:5001/api/Task/{name},{desc},{createDate},{setDate},{userID}";
-
                 try
                 {
-                    HttpClientHandler clientHandler = new HttpClientHandler();
-                    clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
-                    // Pass the handler to httpclient(from you are calling api)
-                    HttpClient client = new HttpClient(clientHandler);
-                    HttpResponseMessage response = await client.PostAsync(loginUrl, null);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        var item = JsonConvert.DeserializeObject<User>(responseBody);
-
-                        if (item != null)
-                        {
-                            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
-                        }
-                        else
-                        {
-                            Error = "user == null";
-                        }
-                    }
+                    string apiUrl = $"https://localhost:5001/api/Task/{name},{desc},{createDate},{setDate},{userID}";
+                    HttpClientHandler clientHandler = new() { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } };
+                    HttpClient client = new(clientHandler);
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, null);
                 }
                 catch (Exception ex)
                 {
@@ -117,5 +132,47 @@ namespace app.ViewModel
                 Error = "Puste pole";
             }
         }
+        private async void RemoveFromBaseAsync(int taskid)
+        {
+            if (taskid != null)
+            {
+                try
+                {
+                    string apiUrl = $"https://localhost:5001/api/Task/{taskid}";
+                    HttpClientHandler clientHandler = new() { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } };
+                    HttpClient client = new(clientHandler);
+                    HttpResponseMessage response = await client.DeleteAsync(apiUrl);
+                }
+                catch (Exception ex)
+                {
+                    Error = ex.Message;
+                }
+            }
+            else
+            {
+                Error = "Puste pole";
+            }
+        }
+        private async void CheackedTackAsync(string name, string desc, string createDate, string setDate, string userID)
+        {
+            if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(desc) && !string.IsNullOrWhiteSpace(createDate) && !string.IsNullOrWhiteSpace(setDate) && !string.IsNullOrWhiteSpace(userID))
+            {
+                try
+                {
+                    string apiUrl = $"https://localhost:5001/api/Task/{name},{desc},{createDate},{setDate},{userID}";
+                    HttpClientHandler clientHandler = new() { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } };
+                    HttpClient client = new(clientHandler);
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, null);
+                }
+                catch (Exception ex)
+                {
+                    Error = ex.Message;
+                }
+            }
+            else
+            {
+                Error = "Puste pole";
+            }
+        } //TODO
     }
 }

@@ -34,15 +34,11 @@ namespace app.ViewModel
             //await Shell.Current.GoToAsync($"//{nameof(MainPage)}?User={Id}");
             if (!string.IsNullOrWhiteSpace(UserLogin) && !string.IsNullOrWhiteSpace(UserPassword))
             {
-                string loginUrl = $"https://localhost:5001/api/User/{UserLogin},{UserPassword}";
-
                 try
                 {
-                    HttpClientHandler clientHandler = new HttpClientHandler();
-                    clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
-                    // Pass the handler to httpclient(from you are calling api)
-                    HttpClient client = new HttpClient(clientHandler);
+                    string loginUrl = $"https://localhost:5001/api/User/{UserLogin},{UserPassword}";
+                    HttpClientHandler clientHandler = new() { ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; } };
+                    HttpClient client = new(clientHandler);
                     HttpResponseMessage response = await client.GetAsync(loginUrl);
 
                     if (response.IsSuccessStatusCode)
